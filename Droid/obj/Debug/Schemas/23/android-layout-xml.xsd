@@ -5,7 +5,7 @@
   <xs:import schemaLocation="schemas.android.com.tools.xsd" namespace="http://schemas.android.com/tools" />
   <xs:annotation>
     <xs:documentation>v23</xs:documentation>
-    <xs:documentation>1/30/2018 5:57:27 PM</xs:documentation>
+    <xs:documentation>1/30/2018 7:00:55 PM</xs:documentation>
   </xs:annotation>
   <xs:group name="any-view">
     <xs:choice>
@@ -84,6 +84,7 @@
       <xs:element ref="fragment" />
       <xs:element ref="opentk_1_0.platform.android.AndroidGameView" />
       <xs:element ref="opentk_1_0.GameViewBase" />
+      <xs:element ref="CocosSharp.CCGameView" />
       <xs:element ref="include" />
     </xs:choice>
   </xs:group>
@@ -1406,6 +1407,16 @@
     </xs:annotation>
   </xs:element>
   <xs:complexType name="opentk_1_0.GameViewBase">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SurfaceView" />
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CocosSharp.CCGameView" type="CocosSharp.CCGameView">
+    <xs:annotation>
+      <xs:documentation>Runtime Type: CocosSharp.CCGameView</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="CocosSharp.CCGameView">
     <xs:complexContent mixed="false">
       <xs:extension base="SurfaceView" />
     </xs:complexContent>

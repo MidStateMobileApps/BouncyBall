@@ -19,3 +19,4 @@ C:\Users\15078725\Desktop\repo\BouncyBall\iOS\bin\iPhoneSimulator\Debug\CocosSha
 C:\Users\15078725\Desktop\repo\BouncyBall\iOS\bin\iPhoneSimulator\Debug\Lidgren.Network.xml
 C:\Users\15078725\Desktop\repo\BouncyBall\iOS\bin\iPhoneSimulator\Debug\MonoGame.Framework.xml
 C:\Users\15078725\Desktop\repo\BouncyBall\iOS\bin\iPhoneSimulator\Debug\MonoGame.Framework.Net.xml
+C:\Users\15078725\Desktop\repo\BouncyBall\iOS\bin\iPhoneSimulator\Debug\BouncyBall.dll.mdb
