@@ -1,0 +1,9 @@
+C:\Users\15078725\Desktop\repo\BouncyBall\BouncyBall\bin\Debug\BouncyBall.dll
+C:\Users\15078725\Desktop\repo\BouncyBall\BouncyBall\bin\Debug\BouncyBall.pdb
+C:\Users\15078725\Desktop\repo\BouncyBall\BouncyBall\obj\Debug\BouncyBall.csproj.CoreCompileInputs.cache
+C:\Users\15078725\Desktop\repo\BouncyBall\BouncyBall\obj\Debug\BouncyBall.dll
+C:\Users\15078725\Desktop\repo\BouncyBall\BouncyBall\obj\Debug\BouncyBall.pdb
+C:\Users\15078725\Desktop\repo\BouncyBall\BouncyBall\bin\Debug\box2d.dll
+C:\Users\15078725\Desktop\repo\BouncyBall\BouncyBall\bin\Debug\CocosSharp.dll
+C:\Users\15078725\Desktop\repo\BouncyBall\BouncyBall\bin\Debug\MonoGame.Framework.dll
+C:\Users\15078725\Desktop\repo\BouncyBall\BouncyBall\obj\Debug\BouncyBall.csprojResolveAssemblyReference.cache
