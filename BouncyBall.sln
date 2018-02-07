@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BouncyBall", "BouncyBall\BouncyBall.csproj", "{72768758-CA41-4C84-BF08-2BDDE2F1B846}"
 EndProject
@@ -60,6 +60,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {13AA91B3-A70B-4FC9-B0A5-BC8E08C1BB59}
+		SolutionGuid = {DD0E3753-2878-4F99-9049-26E224371513}
 	EndGlobalSection
 EndGlobal

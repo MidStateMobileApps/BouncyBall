@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -28,8 +28,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameLayer.cs" />
     <Compile Include="MyClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="box2d, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CocosSharp.1.7.1.0\lib\portable-net45+win+wpa81+wp81\box2d.dll</HintPath>
+    </Reference>
+    <Reference Include="CocosSharp, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CocosSharp.1.7.1.0\lib\portable-net45+win+wpa81+wp81\CocosSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CocosSharp.1.7.1.0\lib\portable-net45+win+wpa81+wp81\MonoGame.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
