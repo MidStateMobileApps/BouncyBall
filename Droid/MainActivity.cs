@@ -20,40 +20,43 @@ namespace BouncyBall.Droid
             SetContentView(Resource.Layout.Main);
 
             CCGameView gameView = (CCGameView)FindViewById(Resource.Id.GameView);
-
             gameView.ViewCreated += LoadGame;
-            
+
+
+            // Get our button from the layout resource,
+            // and attach an event to it
+            //Button button = FindViewById<Button>(Resource.Id.myButton);
+
+            //button.Click += delegate { button.Text = $"{count++} clicks!"; };
         }
 
         private void LoadGame(object sender, System.EventArgs e)
         {
-            CCGameView gameview = sender as CCGameView;
-            if(gameview != null)
+            CCGameView gameView = sender as CCGameView;
+            if ( gameView != null)
             {
                 var contentSearchPaths = new List<string>() { "Fonts", "Sounds" };
-                CCSize viewsize = gameview.ViewSize;
+                CCSizeI viewSize = gameView.ViewSize;
                 int w = 768;
                 int h = 1024;
 
-                gameview.DesignResolution = new CCSizeI(w, h);
-
-                if(w < viewsize.Width)
+                gameView.DesignResolution = new CCSizeI(w, h);
+                if ( w < viewSize.Width)
                 {
                     contentSearchPaths.Add("Images/Hd");
                     CCSprite.DefaultTexelToContentSizeRatio = 2.0f;
                 }
                 else
                 {
-                    contentSearchPaths.Add("Images/ld");
+                    contentSearchPaths.Add("Images/Ld");
                     CCSprite.DefaultTexelToContentSizeRatio = 1.0f;
                 }
 
-                gameview.ContentManager.SearchPaths = contentSearchPaths;
-
-                CCScene gameScene = new CCScene(gameview);
+                gameView.ContentManager.SearchPaths = contentSearchPaths;
+                CCScene gameScene = new CCScene(gameView);
 
                 gameScene.AddLayer(new GameLayer());
-                gameview.RunWithScene(gameScene);
+                gameView.RunWithScene(gameScene);
             }
         }
     }

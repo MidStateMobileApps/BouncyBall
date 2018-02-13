@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>BouncyBall.Droid</RootNamespace>
     <AssemblyName>BouncyBall.Droid</AssemblyName>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -82,10 +82,10 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Content\paddle.png" />
+    <AndroidAsset Include="Assets\Content\ball.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Content\ball.png" />
+    <AndroidAsset Include="Assets\Content\paddle.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Content\Fonts\" />
