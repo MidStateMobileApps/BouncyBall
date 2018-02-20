@@ -16,6 +16,7 @@ namespace BouncyBall
         CCLabel scoreLabel;
         CCLabel winnerLabel;
         CCLabel loserLabel;
+        CCLabel gameOverLabel;
         CCLabel playLabel;
 
         float ballXVelocity;
@@ -30,7 +31,10 @@ namespace BouncyBall
         int level = 1;
         int score = 0;
 
+        int lostCount = 0;
+
         bool winner;
+        bool gameOver;
 
         public GameLayer(): base(CCColor4B.Black)
         {
@@ -68,6 +72,12 @@ namespace BouncyBall
             loserLabel.PositionY = 150;
             loserLabel.AnchorPoint = CCPoint.AnchorLowerRight;
 
+            gameOverLabel = new CCLabel("Game Over", "Chalkduster", 80);
+            gameOverLabel.PositionX = 750;
+            gameOverLabel.PositionY = 150;
+            gameOverLabel.Color = CCColor3B.Red;
+            gameOverLabel.AnchorPoint = CCPoint.AnchorLowerRight;
+
             playLabel = new CCLabel("Play Again?", "Chalkduster", 60);
             playLabel.PositionX = 750;
             playLabel.PositionY = 100;
@@ -90,6 +100,11 @@ namespace BouncyBall
             if (isBallBelowPaddle)
             {
                 winner = false;
+                lostCount++;
+                if (lostCount == 3)
+                {
+                    gameOver = true;
+                }
                 ResetGame();
                 return;
             }
@@ -115,6 +130,7 @@ namespace BouncyBall
                 if (score / level == 2 || score == 2)                    
                 {
                     level++;
+                    lostCount = 0;
                     if (level < 4)
                     {
                         levelMultiplier++;
@@ -150,9 +166,13 @@ namespace BouncyBall
             ballSprite.PositionX = 320;
             ballSprite.PositionY = 600;
 
-            if(winner == true)
+            if(winner)
             {
                 AddChild(winnerLabel);
+            }
+            else if (gameOver)
+            {
+                AddChild(gameOverLabel);
             }
             else
             {
@@ -183,6 +203,15 @@ namespace BouncyBall
                     if (!winner)
                     {
                         score = 0;
+                    }
+                    if (gameOver)
+                    {
+                        score = 0;
+                        level = 1;
+                        lostCount = 0;
+                        gameOver = false;
+                        levelLabel.Text = "Level: " + level;
+                        RemoveChild(gameOverLabel);
                     }
                     scoreLabel.Text = "Score: " + score;
                     RemoveChild(loserLabel);
