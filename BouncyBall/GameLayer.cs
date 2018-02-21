@@ -12,17 +12,26 @@ namespace BouncyBall
         CCSprite paddleSprite;
         CCSprite ballSprite;
         CCLabel scoreLabel;
+        CCLabel levelLabel;
         CCLabel playLabel;
+        CCLabel winnerLabel;
+        CCLabel loserLabel;
+        CCLabel gameOverLabel;
+
 
         bool winner = false;
+        bool lost = false;
+        bool gameOver = false;
 
         float ballXVelocity;
         float ballYVelocity;
 
-        const float Gravity = 140;
+        const float Gravity = 100;
         int levelMultiplier = 1;
 
+        int level = 1;
         int score = 0;
+        int losesCount = 0;
 
         public GameLayer() : base(CCColor4B.Black)
         {
@@ -36,10 +45,9 @@ namespace BouncyBall
             ballSprite.PositionY = 600;
             AddChild(ballSprite);
 
-
-            scoreLabel = new CCLabel("Score: 0", "Arial", 70, CCLabelFormat.SystemFont);
+            scoreLabel = new CCLabel("Score: 0", "Arial", 60, CCLabelFormat.SystemFont);
             scoreLabel.PositionX = 50;
-            scoreLabel.PositionY = 1000;
+            scoreLabel.PositionY = 975;
             scoreLabel.AnchorPoint = CCPoint.AnchorUpperLeft;
             AddChild(scoreLabel);
 
@@ -47,6 +55,28 @@ namespace BouncyBall
             playLabel.PositionX = 750;
             playLabel.PositionY = 100;
             playLabel.AnchorPoint = CCPoint.AnchorLowerRight;
+
+            levelLabel = new CCLabel("Level: 1", "Arial", 60, CCLabelFormat.SystemFont);
+            levelLabel.PositionX = 50;
+            levelLabel.PositionY = 1025;
+            levelLabel.AnchorPoint = CCPoint.AnchorUpperLeft;
+            AddChild(levelLabel);
+
+            winnerLabel = new CCLabel("Winner Winner!", "Chalkduster", 80);
+            winnerLabel.PositionX = 750;
+            winnerLabel.PositionY = 150;
+            winnerLabel.AnchorPoint = CCPoint.AnchorLowerRight;
+
+            loserLabel = new CCLabel("You're Dead", "Chalkduster", 80);
+            loserLabel.PositionX = 750;
+            loserLabel.PositionY = 150;
+            loserLabel.AnchorPoint = CCPoint.AnchorLowerRight;
+
+            gameOverLabel = new CCLabel("Game Over", "Chalkduster", 80);
+            gameOverLabel.PositionX = 750;
+            gameOverLabel.PositionY = 150;
+            gameOverLabel.Color = CCColor3B.Red;
+            gameOverLabel.AnchorPoint = CCPoint.AnchorLowerRight;
 
             Schedule(RunGameLogic);
         }
@@ -63,8 +93,13 @@ namespace BouncyBall
 
             if ( isBallBelowPaddle)
             {
+                winner = false;
+                losesCount++;
+                if(losesCount == 3)
+                {
+                    gameOver = true;
+                }
                 ResetGame();
-                // insert 'you suck' message here?
                 return;
             }
             if (doesBallOverlapPaddle && isMovingDownwards)
@@ -72,12 +107,16 @@ namespace BouncyBall
                 ballYVelocity *= -1;
                 const float MinXVelocity = -300;
                 const float MaxXVelocity = 300;
+
                 ballXVelocity = CCRandom.GetRandomFloat(MinXVelocity, MaxXVelocity);
+
                 score++;
                 scoreLabel.Text = "Score: " + score;
 
-                if(score > 20)
+                if(score >= 20 * level)
                 {
+                    level++;
+                    losesCount = 0;
                     winner = true;
                     ResetGame();
                 }
@@ -107,6 +146,19 @@ namespace BouncyBall
             ballSprite.PositionX = 320;
             ballSprite.PositionY = 600;
 
+
+            if(winner)
+            {
+                AddChild(winnerLabel);
+            }
+            else if(gameOver)
+            {
+                AddChild(gameOverLabel);
+            }
+            else
+            {
+                AddChild(loserLabel);
+            }
             AddChild(playLabel);
             CreateTouchListener();
         }
@@ -145,13 +197,32 @@ namespace BouncyBall
             {
                 if (playLabel.BoundingBoxTransformedToWorld.ContainsPoint(touch.Location))
                 {
-                    score = 0;
                     if(winner)
                     {
+                        levelLabel.Text = "Level: " + level;
+                        //score = 0;
+                        RemoveChild(winnerLabel);
                         levelMultiplier++;
                     }
-                    winner = false;
+                    if(!winner)
+                    {
+                        score = (level - 1) * 20;
+                    }
+                    if(gameOver)
+                    {
+                        score = 0;
+                        level = 1;
+                        losesCount = 0;
+                        levelMultiplier = 1;
+                        gameOver = false;
+                        levelLabel.Text = "Level: " + level;
+                        RemoveChild(gameOverLabel);
+                    }
+                    scoreLabel.Text = "Score: " + score;
                     RemoveChild(playLabel);
+                    RemoveChild(loserLabel);
+                    ballXVelocity = 0;
+                    ballYVelocity = 0;
                     Schedule(RunGameLogic);                    
                 }
             }
