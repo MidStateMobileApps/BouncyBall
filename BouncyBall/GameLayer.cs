@@ -14,15 +14,18 @@ namespace BouncyBall
         CCLabel scoreLabel;
         CCLabel playLabel;
         CCLabel winnerLabel;
+        CCLabel loseLabel;
 
         float ballXVelocity;
         float ballYVelocity;
         bool winner = false;
 
+
         const float GRAVITY = 140;
         int levelMultiplier = 1;
 
         int score = 0;
+        int level;
 
         public GameLayer() : base(CCColor4B.Black)
         {
@@ -42,16 +45,16 @@ namespace BouncyBall
             scoreLabel.AnchorPoint = CCPoint.AnchorUpperLeft;
             AddChild(scoreLabel);
 
+            loseLabel = new CCLabel("You lose!", "ChalkDuster", 100);
+            loseLabel.AnchorPoint = CCPoint.AnchorLowerLeft;
+
             playLabel = new CCLabel("Play Again?", "Chalkduster", 70);
             playLabel.PositionX = 750;
             playLabel.PositionY = 100;
             playLabel.AnchorPoint = CCPoint.AnchorLowerRight;
 
             winnerLabel = new CCLabel("WINNER!", "Chalkduster", 100);
-            winnerLabel.PositionX = 500;
-            winnerLabel.PositionY = 50;
-            winnerLabel.AnchorPoint = CCPoint.AnchorMiddle;
-
+            winnerLabel.AnchorPoint = CCPoint.AnchorLowerLeft;
 
             Schedule(RunGameLogic);
         }
@@ -68,8 +71,15 @@ namespace BouncyBall
 
             if (isBallBelowPaddle)
             {
-                ResetGame();
+                AddChild(playLabel);
+                AddChild(loseLabel);
+                CreateTouchListener();
                 return;
+            }
+
+            if (score > 20)
+            {
+                level++;
             }
 
             if (doesBallOverlapPaddle && isMovingDownward)
@@ -112,6 +122,8 @@ namespace BouncyBall
             ballSprite.PositionX = 320;
             ballSprite.PositionY = 600;
 
+            RemoveChild(winnerLabel);
+            RemoveChild(loseLabel);
             AddChild(playLabel);
             CreateTouchListener();
         }
