@@ -11,7 +11,7 @@ namespace BouncyBall
     {
         CCSprite paddleSprite;
         CCSprite ballSprite;
-        CCSprite ballTwoSprite;
+        CCSprite bombSprite;
         CCLabel levelLabel;
         CCLabel scoreLabel;
         CCLabel winnerLabel;
@@ -21,9 +21,8 @@ namespace BouncyBall
 
         float ballXVelocity;
         float ballYVelocity;
-
-        float ballTwoXVelocity;
-        float ballTwoYVelocity;
+        
+        float bombYVelocity;
 
         const float gravity = 140;
         int levelMultiplier = 1;
@@ -32,13 +31,16 @@ namespace BouncyBall
         int score = 0;
 
         int lostCount = 0;
+        Random random = new Random(Guid.NewGuid().GetHashCode());
 
         bool winner;
         bool gameOver;
 
         public GameLayer(): base(CCColor4B.Black)
         {
-            ballTwoSprite = new CCSprite("ball");
+            bombSprite = new CCSprite("bomb");
+            bombSprite.PositionX = random.Next(10, 520);
+            bombSprite.PositionY = 1000;
 
             paddleSprite = new CCSprite("paddle");
             paddleSprite.PositionX = 100;
@@ -91,6 +93,7 @@ namespace BouncyBall
             ballYVelocity += frameTimeInSeconds * (-gravity * levelMultiplier);
             ballSprite.PositionX += ballXVelocity * frameTimeInSeconds;
             ballSprite.PositionY += ballYVelocity * frameTimeInSeconds;
+                        
 
             bool doesBallOverlapPaddle = ballSprite.BoundingBoxTransformedToParent.IntersectsRect(paddleSprite.BoundingBoxTransformedToParent);
 
@@ -109,11 +112,29 @@ namespace BouncyBall
                 return;
             }
 
-            if (level == 5)
+            if (level >= 5)
             {
-                ballTwoSprite.PositionX = 320;
-                ballTwoSprite.PositionY = 600;
-                AddChild(ballTwoSprite);
+                AddChild(bombSprite);
+
+                bombYVelocity += frameTimeInSeconds * (-gravity * levelMultiplier);
+                bombSprite.PositionY += bombYVelocity * frameTimeInSeconds;
+                if (bombSprite.BoundingBoxTransformedToParent.MaxY < paddleSprite.BoundingBoxTransformedToParent.MinY)
+                {
+                    RemoveChild(bombSprite);
+                    bombSprite.PositionX = random.Next(10, 620);
+                    bombSprite.PositionY = 1200;
+                    AddChild(bombSprite);
+                    bombYVelocity += frameTimeInSeconds * (-gravity * levelMultiplier);
+                    bombSprite.PositionY += bombYVelocity * frameTimeInSeconds;
+                }
+
+                if (bombSprite.BoundingBoxTransformedToParent.IntersectsRect(paddleSprite.BoundingBoxTransformedToParent))
+                {
+                    winner = false;
+                    ResetGame();
+                    return;
+                }
+
             }
 
             if (doesBallOverlapPaddle && isMovingDownwards)
@@ -127,7 +148,7 @@ namespace BouncyBall
                 score++;
                 
                 scoreLabel.Text = "Score: " + score;
-                if (score / level == 2 || score == 2)                    
+                if (score / level == 20 || score == 20)                    
                 {
                     level++;
                     lostCount = 0;
