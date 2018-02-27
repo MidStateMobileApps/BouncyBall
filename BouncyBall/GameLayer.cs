@@ -15,17 +15,20 @@ namespace BouncyBall
         CCLabel playLabel;
         CCLabel winnerLabel;
         CCLabel loseLabel;
+        CCLabel levelLabel;
+        CCLabel gameOverLabel;
 
         float ballXVelocity;
         float ballYVelocity;
-        bool winner = false;
-
+        bool winner;
+        bool gameOver;
 
         const float GRAVITY = 140;
-        int levelMultiplier = 1;
 
+        int levelMultiplier = 1;
         int score = 0;
-        int level;
+        int lossColumn = 0;
+        int level = 1;
 
         public GameLayer() : base(CCColor4B.Black)
         {
@@ -45,6 +48,12 @@ namespace BouncyBall
             scoreLabel.AnchorPoint = CCPoint.AnchorUpperLeft;
             AddChild(scoreLabel);
 
+            levelLabel = new CCLabel("Level: 0", "Ariel", 70, CCLabelFormat.SystemFont);
+            levelLabel.PositionX = 50;
+            levelLabel.PositionY = 950;
+            levelLabel.AnchorPoint = CCPoint.AnchorUpperLeft;
+            AddChild(levelLabel);
+
             loseLabel = new CCLabel("You lose!", "ChalkDuster", 100);
             loseLabel.AnchorPoint = CCPoint.AnchorLowerLeft;
 
@@ -54,7 +63,12 @@ namespace BouncyBall
             playLabel.AnchorPoint = CCPoint.AnchorLowerRight;
 
             winnerLabel = new CCLabel("WINNER!", "Chalkduster", 100);
-            winnerLabel.AnchorPoint = CCPoint.AnchorLowerLeft;
+            winnerLabel.PositionX = 750;
+            winnerLabel.PositionY = 150;
+            winnerLabel.AnchorPoint = CCPoint.AnchorLowerRight;
+
+            gameOverLabel = new CCLabel("Game over! \nThanks for playing!", "Chalkduster", 185);
+            gameOverLabel.AnchorPoint = CCPoint.AnchorLowerLeft;
 
             Schedule(RunGameLogic);
         }
@@ -71,15 +85,14 @@ namespace BouncyBall
 
             if (isBallBelowPaddle)
             {
-                AddChild(playLabel);
-                AddChild(loseLabel);
-                CreateTouchListener();
+                winner = false;
+                lossColumn++;
+                if (lossColumn == 3)
+                {
+                    gameOver = true;
+                }
+                ResetGame();
                 return;
-            }
-
-            if (score > 20)
-            {
-                level++;
             }
 
             if (doesBallOverlapPaddle && isMovingDownward)
@@ -90,10 +103,15 @@ namespace BouncyBall
                 ballXVelocity = CCRandom.GetRandomFloat(minXVelocity, maxXVelocity);
                 score++;
                 scoreLabel.Text = "Score: " + score;
-                if (score > 2)
+                if (score / level == 2 || score == 2)
                 {
+                    level++;
+                    lossColumn = 0;
+                    if (level < 4)
+                    {
+                        levelMultiplier++;
+                    }
                     winner = true;
-                    AddChild(winnerLabel);
                     ResetGame();
                 }
             }
@@ -115,15 +133,24 @@ namespace BouncyBall
         {
             StopAllActions();
             Unschedule(RunGameLogic);
-            scoreLabel.Text = "Score: ";
             paddleSprite.PositionX = 100;
             paddleSprite.PositionY = 100;
-
             ballSprite.PositionX = 320;
             ballSprite.PositionY = 600;
 
-            RemoveChild(winnerLabel);
-            RemoveChild(loseLabel);
+            if (winner)
+            {
+                AddChild(winnerLabel);
+            }
+            else if (gameOver)
+            {
+                AddChild(gameOverLabel);
+            }
+            else
+            {
+                AddChild(loseLabel);
+            }
+
             AddChild(playLabel);
             CreateTouchListener();
         }
@@ -141,11 +168,31 @@ namespace BouncyBall
             {
                 if (playLabel.BoundingBoxTransformedToWorld.ContainsPoint(touch.Location))
                 {
-                    score = 0;
-                    levelMultiplier++;
-                    Schedule(RunGameLogic);
+                    if (winner)
+                    {
+                        levelLabel.Text = "Level: " + level;
+                        RemoveChild(winnerLabel);
+                    }
+                    if (!winner)
+                    {
+                        score = 0;
+                    }
+                    if (gameOver)
+                    {
+                        score = 0;
+                        level = 1;
+                        lossColumn = 0;
+                        RemoveChild(gameOverLabel);
+                        levelLabel.Text = "Level: 1";
+                        gameOver = false;
+                        ballXVelocity = 0;
+                        ballYVelocity = 0;
+                    }
+
+                    scoreLabel.Text = "Score: " + score;
+                    RemoveChild(loseLabel);
                     RemoveChild(playLabel);
-                    winner = false;
+                    Schedule(RunGameLogic);
                 }
             }
         }
