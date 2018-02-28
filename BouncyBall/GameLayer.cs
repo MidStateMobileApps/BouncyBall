@@ -24,6 +24,11 @@ namespace BouncyBall
         float ballXVelocity;
         float ballYVelocity;
 
+        CCEventListenerTouchAllAtOnce touchListenerGameOver = null;
+        CCEventListenerTouchAllAtOnce touchListenerWinGame = null;
+        CCEventListenerTouchAllAtOnce touchListenerLoseGame = null;
+
+
         const float GRAVITY = 140;
         int levelMultiplier = 1;
         int lossCounter = 0;
@@ -123,7 +128,7 @@ namespace BouncyBall
                 scoreLabel.Text = "Total Score: " + score;
                 scoreCounterLabel.Text = "Current Level Score: " + currentLevelScore;
                 
-                if (currentLevelScore >= 20)
+                if (currentLevelScore >= 3)
                 {
                     winner = true;
                     WonGame();
@@ -209,9 +214,13 @@ namespace BouncyBall
         // On Loss events
         private void CreateTouchListener()
         {
-            var touchListener = new CCEventListenerTouchAllAtOnce();
-            touchListener.OnTouchesBegan = TouchesBegan;
-            AddEventListener(touchListener);
+            if (touchListenerLoseGame == null)
+            {
+                touchListenerLoseGame = new CCEventListenerTouchAllAtOnce();
+            }
+
+            touchListenerLoseGame.OnTouchesBegan = TouchesBegan;
+            AddEventListener(touchListenerLoseGame);
         }
 
         private void TouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
@@ -224,11 +233,13 @@ namespace BouncyBall
                     scoreLabel.Text = "Total Score: " + score;
                     currentLevelScore = 0;
                     scoreCounterLabel.Text = "Current Level Score: " + currentLevelScore;
-                    levelMultiplier = 1;
+                    ballYVelocity = 0;
 
                     RemoveChild(playLabel);
                     RemoveChild(youLoseLabel);                    
                     winner = false;
+
+                    RemoveEventListener(touchListenerLoseGame);
 
                     Schedule(RunGameLogic);
                 }
@@ -238,9 +249,13 @@ namespace BouncyBall
         // Game Over events
         private void CreateTouchListenerGameOver()
         {
-            var touchListener = new CCEventListenerTouchAllAtOnce();
-            touchListener.OnTouchesBegan = TouchesBeganGameOver;
-            AddEventListener(touchListener);
+            if (touchListenerGameOver == null)
+            {
+                touchListenerGameOver = new CCEventListenerTouchAllAtOnce();
+            }
+
+            touchListenerGameOver.OnTouchesBegan = TouchesBeganGameOver;
+            AddEventListener(touchListenerGameOver);
         }
 
         private void TouchesBeganGameOver(List<CCTouch> touches, CCEvent touchEvent)
@@ -265,6 +280,8 @@ namespace BouncyBall
                     RemoveChild(restartLabel);
                     winner = false;
 
+                    RemoveEventListener(touchListenerGameOver);
+
                     Schedule(RunGameLogic);
                 }
             }
@@ -273,9 +290,13 @@ namespace BouncyBall
         // Game won events
         private void CreateTouchListenerWinGame()
         {
-            var touchListener = new CCEventListenerTouchAllAtOnce();
-            touchListener.OnTouchesBegan = TouchesBeganGameWon;
-            AddEventListener(touchListener);
+            if (touchListenerWinGame == null)
+            {
+                touchListenerWinGame = new CCEventListenerTouchAllAtOnce();
+            }
+
+            touchListenerWinGame.OnTouchesBegan = TouchesBeganGameWon;
+            AddEventListener(touchListenerWinGame);
         }
 
         
@@ -287,6 +308,7 @@ namespace BouncyBall
                 {                   
                     level++;
                     levelMultiplier = level;
+                    ballYVelocity = 0;
                     lossCounter = 0;
                     RemoveChild(youWinLabel);
                     RemoveChild(nextLevelLabel);
@@ -294,7 +316,8 @@ namespace BouncyBall
                     scoreCounterLabel.Text = "Current Level Score: " + currentLevelScore;
                     winner = false;
 
-                    
+                    RemoveEventListener(touchListenerWinGame);
+
                     Schedule(RunGameLogic);
                 }
             }
