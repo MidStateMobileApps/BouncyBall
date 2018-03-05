@@ -91,5 +91,8 @@
     <Folder Include="Assets\Content\Fonts\" />
     <Folder Include="Assets\Content\Sounds\" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Content\bomb.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
